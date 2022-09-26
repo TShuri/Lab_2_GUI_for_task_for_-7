@@ -12,21 +12,10 @@ namespace lab2_2_GUI_
         private void button1_Click(object sender, EventArgs e)
         {
             var inLine = txt_inLine.Text; // Получаем последовательность в виде строки
+            string[] strNumbers = inLine.Split(" "); // Разбиение строки на числа
             Properties.Settings.Default.inLine = inLine;
             Properties.Settings.Default.Save(); // Сохраняем переданные значения
-            string message = Logic.Check(inLine);
-            if (message != "Error") // Если функция не вернула ошибку, то 
-            {                       // выводим ответ
-                MessageBox.Show(message);
-            }
-        }
-    }
-    public class Logic
-    {
-        public static string Check(string line)
-        {
-            // НАЧАЛО логики
-            string[] strNumbers = line.Split(" "); // Разбиение строки на числа
+
             int[] numbers = new int[strNumbers.Length]; // Создание int массива для чисел
 
             for (int i = 0; i < (strNumbers.Length); i++) // Преобразование str числа в int и
@@ -35,17 +24,24 @@ namespace lab2_2_GUI_
                 {
                     numbers[i] = int.Parse(strNumbers[i]);
                 }
-                catch(FormatException)
+                catch (FormatException)
                 {
                     MessageBox.Show("Ты ввёл буквы в последовательность?", "Oh Shit", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return "Error";
+                    return;
                 }
             }
 
+            MessageBox.Show(Logic.Check(numbers));
+        }
+    }
+    public class Logic
+    {
+        public static string Check(int[] _numbers)
+        {
             string outMessage = "Последовательность упорядочена"; // Сообщение по умолчанию
-            for (int i = 0; i < (numbers.Length) - 1; i++) // Проверка упорядоченности ряда
+            for (int i = 0; i < (_numbers.Length) - 1; i++) // Проверка упорядоченности ряда
             {
-                if (numbers[i] >= numbers[i + 1]) // Если текущее число не меньше следующего,
+                if (_numbers[i] >= _numbers[i + 1]) // Если текущее число не меньше следующего,
                 {                                 // то меняется сообщение
                     outMessage = "Последовательность не упорядочена";
                     break;
